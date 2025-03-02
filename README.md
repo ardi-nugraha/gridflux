@@ -35,10 +35,6 @@ Run the following command based on your Linux distribution:
   ```sh
   sudo dnf install -y gcc make pkg-config gtk3-devel libwnck3-devel libxcb-devel
   ```
-- **Arch Linux**:
-  ```sh
-  sudo pacman -Sy --noconfirm gcc make pkg-config gtk3 libwnck3 xcb
-  ```
 - **Alpine Linux**:
   ```sh
   sudo apk add --no-cache gcc make pkgconf gtk+3.0-dev libwnck-dev libxcb-dev
