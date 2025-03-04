@@ -95,13 +95,27 @@ static void arrange_windows(WindowArranger *arranger)
   int screen_width, screen_height;
 
   get_screen_size(&screen_width, &screen_height);
-  WindowTree *tree = init_window_tree(screen_width, screen_height);
+  // Capture dock windows' dimensions
+  int dock_x = 0, dock_y = 0, dock_width = 0, dock_height = 0;
+
+  // Iterate through windows to find docks first
+  for (GList *l = windows; l != NULL; l = l->next)
+  {
+    WnckWindow *window = WNCK_WINDOW(l->data);
+    if (wnck_window_get_window_type(window) == WNCK_WINDOW_DOCK)
+    {
+      wnck_window_get_geometry(window, &dock_x, &dock_y, &dock_width, &dock_height);
+    }
+  }
+
+  WindowTree *tree = init_window_tree(screen_width, screen_height - dock_height);
   WindowTree *tmpTree = init_window_tree(screen_width, screen_height);
 
   // Filter windows
   for (GList *l = windows; l != NULL; l = l->next)
   {
     WnckWindow *window = WNCK_WINDOW(l->data);
+
     if (!wnck_window_is_minimized(window) &&
         wnck_window_get_window_type(window) == WNCK_WINDOW_NORMAL &&
         wnck_window_get_workspace(window) == active_workspace)
@@ -112,10 +126,10 @@ static void arrange_windows(WindowArranger *arranger)
       wnck_window_get_geometry(window, &x, &y, &width, &height);
 
       insert_window(tmpTree, window);
-      tmpTree->root->x = x;
-      tmpTree->root->y = y;
-      tmpTree->root->width = width;
-      tmpTree->root->height = height;
+      tmpTree->root->x = abs(x);
+      tmpTree->root->y = abs(y);
+      tmpTree->root->width = abs(width);
+      tmpTree->root->height = abs(height);
 
       insert_window(tree, window);
     }
