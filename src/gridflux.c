@@ -139,7 +139,12 @@ static void arrange_windows(WindowArranger *arranger) {
 
       insert_window(tree, window);
       if (IS_KDE) {
-        tree->root->y = top_dock > 0 ? top_dock - 15 : 15;
+        tree->root->y = top_dock > 0 ? top_dock - 10 : 5;
+      } else {
+        tree->root->x = x;
+        tree->root->y = y;
+        tree->root->width = width;
+        tree->root->height = height;
       }
     }
   }
