@@ -71,9 +71,25 @@ install_dependencies() {
 }
 
 build_and_install() {
+  set -e
+
+  SESSION=$(echo "$XDG_CURRENT_DESKTOP" | awk '{print toupper($0)}')
+
+  case "$SESSION" in
+  *KDE*) SESSION_MACRO="-DSESSION_KDE" ;;
+  *GNOME*) SESSION_MACRO="-DSESSION_GNOME" ;;
+  *XFCE*) SESSION_MACRO="-DSESSION_XFCE" ;;
+  *LXQT*) SESSION_MACRO="-DSESSION_LXQT" ;;
+  *MATE*) SESSION_MACRO="-DSESSION_MATE" ;;
+  *) SESSION_MACRO="" ;;
+  esac
+
+  print_status "Detected session: $SESSION"
+  print_status "Using compilation flag: $SESSION_MACRO"
+
   print_status "Building the project..."
   make clean
-  make
+  make SESSION_MACRO="$SESSION_MACRO"
 
   print_status "Stopping existing gridflux service..."
   sudo systemctl stop gridflux.service 2>/dev/null || true
@@ -85,14 +101,11 @@ build_and_install() {
   sleep 2
 
   print_status "Installing gridflux to $INSTALL_DIR..."
-  sudo cp gridflux "$INSTALL_DIR/" || {
+  sudo install -m 755 gridflux "$INSTALL_DIR/" || {
     print_error "Failed to copy gridflux to $INSTALL_DIR"
     exit 1
   }
-  sudo chmod +x "$INSTALL_DIR/gridflux" || {
-    print_error "Failed to make gridflux executable"
-    exit 1
-  }
+
   print_status "Binary installation complete"
 }
 

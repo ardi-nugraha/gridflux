@@ -32,8 +32,13 @@
 #define MAX_WINDOWS_PER_WORKSPACE 5
 #define POLLING_INTERVAL 300
 
-typedef struct
-{
+#ifdef SESSION_KDE
+#define IS_KDE 1
+#else
+#define IS_KDE 0
+#endif
+
+typedef struct {
   WnckHandle *handle;
   WnckScreen *screen;
   xcb_connection_t *xcb_conn;

@@ -25,15 +25,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef enum
-{
-  SPLIT_HORIZONTAL,
-  SPLIT_VERTICAL
-} SplitDirection;
+typedef enum { SPLIT_HORIZONTAL, SPLIT_VERTICAL } SplitDirection;
 
 // Node in the window tree
-typedef struct TreeNode
-{
+typedef struct TreeNode {
   struct TreeNode *left;
   struct TreeNode *right;
   struct TreeNode *parent;
@@ -44,8 +39,7 @@ typedef struct TreeNode
   int width, height; // Dimensions
 } TreeNode;
 
-typedef struct
-{
+typedef struct {
   TreeNode *root;
   int screen_width;
   int screen_height;

@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = `pkg-config --cflags gtk+-3.0 libwnck-3.0`
+CFLAGS = $(SESSION_MACRO) `pkg-config --cflags gtk+-3.0 libwnck-3.0`
 LDFLAGS = `pkg-config --libs gtk+-3.0 libwnck-3.0` -lxcb
 SRC_DIR = src
 BUILD_DIR = build
@@ -8,7 +8,6 @@ OBJ = $(patsubst $(SRC_DIR)/%.c, $(BUILD_DIR)/%.o, $(SRC))
 EXEC = gridflux  
 PREFIX = /usr/local
 BINDIR = $(PREFIX)/bin
-SYSTEMD_DIR = $(HOME)/.config/systemd/user
 
 all: $(BUILD_DIR) $(EXEC)
 
@@ -24,5 +23,4 @@ $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c | $(BUILD_DIR)
 clean:
 	rm -rf $(BUILD_DIR) $(EXEC)
 
-# Phony targets
-.PHONY: all clean 
+.PHONY: all clean
